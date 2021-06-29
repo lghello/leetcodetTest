@@ -4256,6 +4256,64 @@ class Solution {
     LinkedList<String> ans = new LinkedList<>();
     Map<String,Map<String,Integer>> map = new TreeMap<>();
     public List<String> findItinerary(List<List<String>> tickets) {
+        for(List<String> ticket:tickets){
+            if(map.get(ticket.get(0))==null){
+                Map<String,Integer> temp = new TreeMap<>();
+                temp.put(ticket.get(1),1);
+                map.put(ticket.get(0),temp);
+            }
+            else{
+                Map<String,Integer> temp = map.get(ticket.get(0));
+                if(temp.get(ticket.get(1))==null){
+                    temp.put(ticket.get(1),1);
+                }
+                else{
+                    temp.put(ticket.get(1),temp.get(ticket.get(1))+1);
+                }
+                // Collections.sort(temp);
+                map.put(ticket.get(0),temp);
+            }
+        }
+       
+        // System.out.println(map);
+        ans.add("JFK");
+        // System.out.println(tickets.size());
+        backtracking(tickets.size());
+        return ans;
+    }
+
+    public boolean backtracking(int ticketNum){
+        if(ans.size()==ticketNum+1){
+            return true;
+        }
+        // System.out.println("ans:"+ans);
+        Map<String,Integer> temp = map.get(ans.get(ans.size()-1));
+        // System.out.println("temp:"+temp);
+        if(temp!=null){
+            for(String key:temp.keySet()){
+                int r = temp.get(key);
+                if(r>0){
+                    r--;
+                    temp.put(key,r);
+                    // map.put(ans.get(ans.size()-1),temp);
+                    ans.add(key);
+                    // System.out.println("map:"+map);
+                    if(backtracking(ticketNum)) return true;
+                    r++;
+                    temp.put(key,r);
+                    // map.put(ans.get(ans.size()-1),temp);
+                    ans.removeLast();
+                }
+            }
+        }
+        return false;
+    }
+}
+
+class Solution {
+    LinkedList<String> ans = new LinkedList<>();
+    Map<String,Map<String,Integer>> map = new TreeMap<>();
+    public List<String> findItinerary(List<List<String>> tickets) {
         Map<String,Integer> temp;
         for(List<String> ticket:tickets){
             if(map.get(ticket.get(0))==null){
