@@ -4498,6 +4498,52 @@ class Solution {
 }
 ```
 
+## 37. 解数独
+```java
+class Solution {
+    public void solveSudoku(char[][] board) {
+        backtracking(board);
+    }
+
+    public boolean backtracking(char[][] board){
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]!='.') continue;
+                for(char k='1';k<='9';k++){
+                    if(judge(i,j,k,board)){
+                        board[i][j] = k;
+                        if(backtracking(board)) return true;
+                        board[i][j] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean judge(int row,int col,char c,char[][] board){
+
+        for(int i=0;i<board.length;i++){
+            if(board[i][col]==c) return false;
+        }
+
+        for(int j=0;j<board[0].length;j++){
+            if(board[row][j]==c) return false;
+        }
+
+        int startRow = (row/3)*3;
+        int startCol = (col/3)*3;
+        for(int i=startRow;i<startRow+3;i++){
+            for(int j=startCol;j<startCol+3;j++){
+                if(board[i][j]==c) return false;
+            }
+        }
+
+        return true;
+    }
+}
+```
 # 贪心
 
 ## [455. 分发饼干](https://leetcode-cn.com/problems/assign-cookies/)
